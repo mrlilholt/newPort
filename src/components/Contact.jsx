@@ -1,7 +1,33 @@
 import React from "react";
+import emailjs from "@emailjs/browser";
 import "./Contact.css";
 
 const Contact = () => {
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_92c0d4u",     // Replace with your EmailJS service ID
+        "service_92c0d4u",    // Replace with your EmailJS template ID
+        e.target,
+        "OsBsYfQ47SG2Mjb5h"      // Replace with your EmailJS public key
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          // Optionally, redirect or show a success message
+          alert("Message sent successfully!");
+        },
+        (error) => {
+          console.log(error.text);
+          alert("Failed to send message, please try again.");
+        }
+      );
+
+    e.target.reset();
+  };
+
   return (
     <section id="contact" className="contact-section">
       <h2 className="contact-title">Get in Touch</h2>
@@ -10,15 +36,7 @@ const Contact = () => {
         <strong> addison.lilholt@gmail.com</strong>.
       </p>
 
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        action="/thank-you"
-        className="contact-form"
-      >
-        <input type="hidden" name="form-name" value="contact" />
-
+      <form onSubmit={sendEmail} className="contact-form">
         {/* Name field */}
         <div className="form-group">
           <label htmlFor="name" className="contact-label">Name</label>
